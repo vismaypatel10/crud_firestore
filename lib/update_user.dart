@@ -14,7 +14,6 @@ class UpdateUser extends StatefulWidget {
 
 class _UpdateUserState extends State<UpdateUser> {
   final _form = GlobalKey<FormState>();
-
   //update user at specific id
   CollectionReference Users = FirebaseFirestore.instance.collection('users');
   Future<void> updateUser(id, name, email) {

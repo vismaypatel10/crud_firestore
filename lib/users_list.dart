@@ -56,7 +56,7 @@ class _UsersListState extends State<UsersList> {
                 return Text('Something went wrong');
               }
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Text("Loading");
+                return CircularProgressIndicator();
               }
 
               final List storedocs = [];
@@ -121,7 +121,10 @@ class _UsersListState extends State<UsersList> {
                                 )),
                             IconButton(
                                 onPressed: () {
-                                  deleteuser(storedocs[index]['id']);
+                                  deleteuser(storedocs[index]['id']).then(
+                                      (value) => ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text('User Deleted'))));
                                 },
                                 icon: Icon(
                                   Icons.delete,
