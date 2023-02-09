@@ -56,7 +56,7 @@ class _UsersListState extends State<UsersList> {
                 return Text('Something went wrong');
               }
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
+                return Center(child: CircularProgressIndicator());
               }
 
               final List storedocs = [];
@@ -70,69 +70,91 @@ class _UsersListState extends State<UsersList> {
               return ListView.builder(
                 itemCount: storedocs.length,
                 itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.all(15),
-                    height: 100,
-                    decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Name : ${storedocs[index]['Name']}',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            SizedBox(
-                              height: 16,
-                            ),
-                            Text(
-                              'Email : ${storedocs[index]['Email']}',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600),
-                            )
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => UpdateUser(
-                                          id: storedocs[index]['id'],
-                                        ),
-                                      ));
-                                },
-                                icon: Icon(
-                                  Icons.edit,
-                                  color: Colors.green,
-                                )),
-                            IconButton(
-                                onPressed: () {
-                                  deleteuser(storedocs[index]['id']).then(
-                                      (value) => ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                              content: Text('User Deleted'))));
-                                },
-                                icon: Icon(
-                                  Icons.delete,
-                                  color: Colors.red,
-                                ))
-                          ],
-                        )
-                      ],
+                  return Dismissible(
+                    key: GlobalKey(),
+                    background: Container(
+                        margin: EdgeInsets.all(15),
+                        padding: EdgeInsets.only(right: 20),
+                        decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(10)),
+                        alignment: Alignment.centerRight,
+                        child: Icon(
+                          Icons.delete,
+                          size: 30,
+                          color: Colors.white,
+                        )),
+                    direction: DismissDirection.endToStart,
+                    onDismissed: (direction) {
+                      deleteuser(storedocs[index]['id']).then((value) =>
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('User Deleted'))));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.all(15),
+                      height: 100,
+                      decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Name : ${storedocs[index]['Name']}',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              SizedBox(
+                                height: 16,
+                              ),
+                              Text(
+                                'Email : ${storedocs[index]['Email']}',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600),
+                              )
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => UpdateUser(
+                                            id: storedocs[index]['id'],
+                                          ),
+                                        ));
+                                  },
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: Colors.green,
+                                  )),
+                              // IconButton(
+                              //     onPressed: () {
+                              //       deleteuser(storedocs[index]['id']).then(
+                              //           (value) => ScaffoldMessenger.of(context)
+                              //               .showSnackBar(SnackBar(
+                              //                   content:
+                              //                       Text('User Deleted'))));
+                              //     },
+                              //     icon: Icon(
+                              //       Icons.delete,
+                              //       color: Colors.red,
+                              //     ))
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   );
                 },
